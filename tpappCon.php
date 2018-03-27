@@ -36,7 +36,21 @@ function removeApp($appid) {
 function count_operation_for_app($appid) {
     $result = db_query("SELECT count(*) FROM operation WHERE appid = $appid");
     return $result -> fetch_assoc()['count(*)'];
+}
 
+function getUserProperties() {
+    $result = db_query("SELECT DISTINCT user_property FROM user_properties");
+    $re_str = "{[";
+    $isFirst = true;
+    while ($row = $result -> fetch_assoc()["user_property"]) {
+        if (!$isFirst) {
+            $re_str = $re_str.",";
+        }
+        $re_str = $re_str.$row;
+        $isFirst = false;
+    }
+    $re_str = $re_str."]}";
+    return $re_str;
 }
  
 
@@ -54,6 +68,10 @@ case "addUser":
     break;
 case "addUserPropertyValue":
     addUserPropertyValue($_GET["userid"], $_GET["property"], $_GET["value"]);
+    break;
+case "getUserProperties":
+    echo getUserProperties();
+    break;
 case "removeUser":
     removeUser($_GET["userid"]);
     break;
