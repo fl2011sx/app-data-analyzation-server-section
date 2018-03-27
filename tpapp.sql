@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users(
 );
 
 CREATE TABLE IF NOT EXISTS user_properties(
-    user_property VARCHAR(20) PRIMARY KEY;
+    user_property VARCHAR(20) PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS user_pro_val(
