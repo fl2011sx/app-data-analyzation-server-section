@@ -1,46 +1,40 @@
 <?php
 
-function addUser($userid, $username) {
+function db_query($query) {
     global $db;
-    $query = "INSERT INTO users(userid, username) VALUES($userid, \"$username\")";
-    // echo $query;
-    $db -> query($query);
+    return $db -> query($query);
+}
+
+function addUser($userid, $username) {
+    db_query("INSERT INTO users(userid, username) VALUES($userid, \"$username\")");
+}
+
+function addUserPropertyValue($userid, $property, $value) {
+    db_query("INSERT INTO user_pro_val(userid, user_property, user_pro_value) VALUSE($userid, \"$property\", \"$value\")");
 }
 
 function removeUser($userid) {
-    global $db;
-    $query = "DELETE FROM users WHERE userid=$userid";
-    $db -> query($query);
+    db_query("DELETE FROM users WHERE userid=$userid");
 }
 
 function addApp($appid, $appname) {
-    global $db;
-    $query = "INSER INTO apps(appid, appname) VALUES($appid, \"$appname\")";
-    $db -> query($query);
+    db_query("INSER INTO apps(appid, appname) VALUES($appid, \"$appname\")");
 }
 
 function addOperation($operatingtime, $userid, $appid) {
-    global $db;
-    $query = "INSERT INTO operation(operatingtime, userid, appid) VALUES($operatingtime, $userid, $appid)";
-    $db -> query($query);
+    db_query("INSERT INTO operation(operatingtime, userid, appid) VALUES($operatingtime, $userid, $appid)");
 }
 
 function removeOperation($operatingid) {
-    global $db;
-    $query = "DELETE FROM operation WHERE operatingid = $operatingid";
-    $db -> query($query);
+    db_query("DELETE FROM operation WHERE operatingid = $operatingid");
 }
 
 function removeApp($appid) {
-    global $db;
-    $query = "DELETE FROM apps WHERE appid = \"$appid\"";
-    $db -> query($query);
+    db_query("DELETE FROM apps WHERE appid = \"$appid\"");
 }
 
 function count_operation_for_app($appid) {
-    global $db;
-    $query = "SELECT count(*) FROM operation WHERE appid = $appid";
-    $result = $db -> query($query);
+    $result = db_query("SELECT count(*) FROM operation WHERE appid = $appid");
     return $result -> fetch_assoc()['count(*)'];
 
 }
