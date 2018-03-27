@@ -40,13 +40,13 @@ function count_operation_for_app($appid) {
 
 function getUserProperties() {
     $result = db_query("SELECT DISTINCT user_property FROM user_properties");
-    $re_str = "{[";
+    $re_str = "{\"properties\":[";
     $isFirst = true;
     while ($row = $result -> fetch_assoc()["user_property"]) {
         if (!$isFirst) {
             $re_str = $re_str.",";
         }
-        $re_str = $re_str.$row;
+        $re_str = $re_str."\"".$row."\"";
         $isFirst = false;
     }
     $re_str = $re_str."]}";
