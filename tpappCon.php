@@ -52,6 +52,8 @@ switch ($command) {
 case "addUser":
     addUser($_GET["userid"], $_GET["username"]);
     break;
+case "addUserPropertyValue":
+    addUserPropertyValue($_GET["userid"], $_GET["property"], $_GET["value"]);
 case "removeUser":
     removeUser($_GET["userid"]);
     break;
