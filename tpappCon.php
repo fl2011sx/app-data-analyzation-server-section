@@ -9,7 +9,8 @@ function addUser($username) {
     db_query("INSERT INTO users(username) VALUES(\"$username\")");
 }
 
-function addUserPropertyValue($userid, $property, $value) {
+function addUserPropertyValue($username, $property, $value) {
+    $userid = getUserId($username);
     db_query("INSERT INTO user_pro_val(userid, user_property, user_pro_value) VALUSE($userid, \"$property\", \"$value\")");
 }
 
@@ -53,6 +54,10 @@ function getUserProperties() {
     return $re_str;
 }
  
+function getUserId($username) {
+    $result = db_query("SELECT userid FROM users WHERE username=".$username);
+    return $result -> fetch_assos()['userid'];
+}
 
 $db = new mysqli('127.0.0.1', 'root', 'FLZdown1km$mysql!');
 if (mysqli_connect_errno()) {
@@ -67,7 +72,7 @@ case "addUser":
     addUser($_GET["userid"], $_GET["username"]);
     break;
 case "addUserPropertyValue":
-    addUserPropertyValue($_GET["userid"], $_GET["property"], $_GET["value"]);
+    addUserPropertyValue($_GET["username"], $_GET["property"], $_GET["value"]);
     break;
 case "getUserProperties":
     echo getUserProperties();
