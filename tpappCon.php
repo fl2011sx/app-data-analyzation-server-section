@@ -5,8 +5,8 @@ function db_query($query) {
     return $db -> query($query);
 }
 
-function addUser($userid, $username) {
-    db_query("INSERT INTO users(userid, username) VALUES($userid, \"$username\")");
+function addUser($username) {
+    db_query("INSERT INTO users(username) VALUES(\"$username\")");
 }
 
 function addUserPropertyValue($userid, $property, $value) {

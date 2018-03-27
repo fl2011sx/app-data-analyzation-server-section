@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users(
-    userid INT PRIMARY KEY,
+    userid INT AUTO_INCREMENTINT PRIMARY KEY,
     username VARCHAR(20) UNIQUE
 );
 
