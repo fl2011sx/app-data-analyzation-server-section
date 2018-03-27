@@ -69,7 +69,7 @@ $db -> select_db('tpapp');
 $command = $_GET["command"];
 switch ($command) {
 case "addUser":
-    addUser($_GET["userid"], $_GET["username"]);
+    addUser($_GET["username"]);
     break;
 case "addUserPropertyValue":
     addUserPropertyValue($_GET["username"], $_GET["property"], $_GET["value"]);
