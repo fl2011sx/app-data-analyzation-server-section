@@ -3,6 +3,17 @@ CREATE TABLE IF NOT EXISTS users(
     username VARCHAR(20) UNIQUE
 );
 
+CREATE TABLE IF NOT EXISTS user_properties(
+    user_property VARCHAR(20) PRIMARY KEY;
+);
+
+CREATE TABLE IF NOT EXISTS user_pro_val(
+    userid INT REFERENCES users(userid),
+    user_property VARCHAR(20) REFERENCES user_properties(user_property),
+    user_pro_value VARCHAR(20) REFERENCES,
+    PRIMARY KEY(userid, user_property)
+);
+
 CREATE TABLE IF NOT EXISTS apps(
     appid INT PRIMARY KEY,
     appname VARCHAR(20)
