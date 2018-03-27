@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS user_properties(
 CREATE TABLE IF NOT EXISTS user_pro_val(
     userid INT REFERENCES users(userid),
     user_property VARCHAR(20) REFERENCES user_properties(user_property),
-    user_pro_value VARCHAR(20) REFERENCES,
+    user_pro_value VARCHAR(20),
     PRIMARY KEY(userid, user_property)
 );
 
