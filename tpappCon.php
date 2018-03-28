@@ -21,6 +21,12 @@ function addUserPropertyValue($username, $property, $value) {
     db_query("INSERT INTO user_pro_val(userid, user_property, user_pro_value) VALUSE($userid, \"$property\", \"$value\")");
 }
 
+function isExistUser($username) {
+    $result = db_query("SELECT count(*) FROM users WHERE username=".$username);
+    $count = $result -> fetch_assoc()['count(*)'];
+    return count;
+}
+
 function removeUser($userid) {
     db_query("DELETE FROM users WHERE userid=$userid");
 }
