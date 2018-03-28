@@ -6,7 +6,14 @@ function db_query($query) {
 }
 
 function addUser($username) {
+    resetUserIdIterator();
     db_query("INSERT INTO users(username) VALUES(\"$username\")");
+}
+
+function resetUserIdIterator() {
+    $result = db_query("SELECT MAX(userid) FROM users");
+    $max_id = $result -> fetch_assoc()['max(userid)'] + 1;
+    db_query("alter table users auto_increment=".$max_id);
 }
 
 function addUserPropertyValue($username, $property, $value) {
