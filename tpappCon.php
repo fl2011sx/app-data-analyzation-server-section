@@ -22,9 +22,9 @@ function addUserPropertyValue($username, $property, $value) {
 }
 
 function isExistUser($username) {
-    $result = db_query("SELECT count(*) FROM users WHERE username=".$username);
+    $result = db_query("SELECT count(*) FROM users WHERE username=\"".$username."\"");
     $count = $result -> fetch_assoc()['count(*)'];
-    return count;
+    return $count;
 }
 
 function removeUser($userid) {
@@ -92,6 +92,9 @@ case "getUserProperties":
     break;
 case "removeUser":
     removeUser($_GET["userid"]);
+    break;
+case "login":
+    echo isExistUser($_GET["username"]);
     break;
 case "addApp":
     addApp($_GET["appid"], $_GET["appname"]);
