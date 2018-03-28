@@ -14,23 +14,18 @@ CREATE TABLE IF NOT EXISTS user_pro_val(
     PRIMARY KEY(userid, user_property)
 );
 
-CREATE TABLE IF NOT EXISTS apps(
-    appid INT PRIMARY KEY,
-    appname VARCHAR(20)
+CREATE TABLE IF NOT EXISTS operation_type(
+    operartion_type VARCHAR(50) PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS operation(
     operatingid INT AUTO_INCREMENT PRIMARY KEY,
-    operatingtime DOUBLE(16, 5),
+    operatingtime DOUBLE(16, 2),
     userid INT REFERENCES users(userid),
-    appid INT REFERENCES apps(appid)
+    operation_type VARCHAR(20) REFERENCES operation_type(operartion_type)
 );
 
 INSERT users VALUES(1, "user1");
 INSERT users VALUES(2, "user2");
 
-INSERT apps VALUES(1, "app1");
-INSERT apps VALUES(2, "app2");
-
-INSERT operation VALUES(1, 1, 1, 1);
-INSERT operation VALUES(2, 2, 2, 1);
+INSERT operation_type VALUES("login");

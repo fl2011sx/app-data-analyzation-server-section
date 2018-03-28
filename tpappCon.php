@@ -27,31 +27,36 @@ function isExistUser($username) {
     return $count;
 }
 
+function setLoginOperation($username, $operatingtime) {
+    $userid = getUserId($username);
+    db_query("INSERT INTO operation(operatingtime, userid, operation_type) VALUES($operatingtime, $userid, \"login\")");
+}
+
 function removeUser($userid) {
     db_query("DELETE FROM users WHERE userid=$userid");
 }
-
+/*
 function addApp($appid, $appname) {
     db_query("INSER INTO apps(appid, appname) VALUES($appid, \"$appname\")");
 }
-
+*//*
 function addOperation($operatingtime, $userid, $appid) {
     db_query("INSERT INTO operation(operatingtime, userid, appid) VALUES($operatingtime, $userid, $appid)");
 }
-
+*//*
 function removeOperation($operatingid) {
     db_query("DELETE FROM operation WHERE operatingid = $operatingid");
 }
-
+*//*
 function removeApp($appid) {
     db_query("DELETE FROM apps WHERE appid = \"$appid\"");
 }
-
+*//*
 function count_operation_for_app($appid) {
     $result = db_query("SELECT count(*) FROM operation WHERE appid = $appid");
     return $result -> fetch_assoc()['count(*)'];
 }
-
+*/
 function getUserProperties() {
     $result = db_query("SELECT DISTINCT user_property FROM user_properties");
     $re_str = "{\"properties\":[";
@@ -68,8 +73,8 @@ function getUserProperties() {
 }
  
 function getUserId($username) {
-    $result = db_query("SELECT userid FROM users WHERE username=".$username);
-    return $result -> fetch_assos()['userid'];
+    $result = db_query("SELECT userid FROM users WHERE username=\"".$username."\"");
+    return $result -> fetch_assoc()['userid'];
 }
 
 $db = new mysqli('127.0.0.1', 'root', 'FLZdown1km$mysql!');
@@ -94,23 +99,27 @@ case "removeUser":
     removeUser($_GET["userid"]);
     break;
 case "login":
-    echo isExistUser($_GET["username"]);
-    break;
-case "addApp":
-    addApp($_GET["appid"], $_GET["appname"]);
-    break;
-case "removeApp":
-    removeApp($_GET["appname"]);
-    break;
-case "addOperation":
-    addOperation(/*$_GET["operatingid"], */$_GET["operatingtime"], $_GET["userid"], $_GET["appid"]);
-    break;
-case "removeOperation":
-    removeOperation($_GET["opreatingid"]);
-    break;
-case "countOperationForApp":
-    echo count_operation_for_app($_GET["appid"]);
-    break;
+    $isSucc = isExistUser($_GET["username"]);
+    echo $isSucc;
+    if ($isSucc) {
+        setLoginOperation($_GET["username"], time());
+    }
+    break; 
+// case "addApp":
+//     addApp($_GET["appid"], $_GET["appname"]);
+//     break;
+// case "removeApp":
+//     removeApp($_GET["appname"]);
+//     break;
+// case "addOperation":
+//     addOperation(/*$_GET["operatingid"], */$_GET["operatingtime"], $_GET["userid"], $_GET["appid"]);
+//     break;
+// case "removeOperation":
+//     removeOperation($_GET["opreatingid"]);
+//     break;
+// case "countOperationForApp":
+//     echo count_operation_for_app($_GET["appid"]);
+//     break;
 default:
     echo "command undefined.";
     break;
