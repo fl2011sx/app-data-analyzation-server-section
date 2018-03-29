@@ -5,9 +5,13 @@ function db_query($query) {
     return $db -> query($query);
 }
 
-function addUser($username) {
+function addUser($username, $note = 0) {
     resetUserIdIterator();
-    db_query("INSERT INTO users(username) VALUES(\"$username\")");
+    $que = "INSERT INTO users(username) VALUES(\"$username\")";
+    if ($note !== 0) {
+        $que = "INSERT INTO users(username, note) VALUES(\"$username\", \"$note\")";
+    }
+    db_query($que);
 }
 
 function resetUserIdIterator() {
@@ -18,7 +22,7 @@ function resetUserIdIterator() {
 
 function addUserPropertyValue($username, $property, $value) {
     $userid = getUserId($username);
-    db_query("INSERT INTO user_pro_val(userid, user_property, user_pro_value) VALUSE($userid, \"$property\", \"$value\")");
+    db_query("INSERT INTO user_pro_val(userid, user_property, user_pro_value) VALUES($userid, \"$property\", \"$value\")");
 }
 
 function isExistUser($username) {
@@ -35,28 +39,7 @@ function setLoginOperation($username, $operatingtime) {
 function removeUser($userid) {
     db_query("DELETE FROM users WHERE userid=$userid");
 }
-/*
-function addApp($appid, $appname) {
-    db_query("INSER INTO apps(appid, appname) VALUES($appid, \"$appname\")");
-}
-*//*
-function addOperation($operatingtime, $userid, $appid) {
-    db_query("INSERT INTO operation(operatingtime, userid, appid) VALUES($operatingtime, $userid, $appid)");
-}
-*//*
-function removeOperation($operatingid) {
-    db_query("DELETE FROM operation WHERE operatingid = $operatingid");
-}
-*//*
-function removeApp($appid) {
-    db_query("DELETE FROM apps WHERE appid = \"$appid\"");
-}
-*//*
-function count_operation_for_app($appid) {
-    $result = db_query("SELECT count(*) FROM operation WHERE appid = $appid");
-    return $result -> fetch_assoc()['count(*)'];
-}
-*/
+
 function getUserProperties() {
     $result = db_query("SELECT DISTINCT user_property FROM user_properties");
     $re_str = "{\"properties\":[";
@@ -77,51 +60,63 @@ function getUserId($username) {
     return $result -> fetch_assoc()['userid'];
 }
 
-$db = new mysqli('127.0.0.1', 'root', 'FLZdown1km$mysql!');
-if (mysqli_connect_errno()) {
-    echo "connect error!";
-    exit;
+function addUserProperty($pro) {
+    db_query("INSERT INTO user_properties(user_property) VALUES(\"$pro\")");
 }
-$db -> select_db('tpapp');
 
-$command = $_GET["command"];
-switch ($command) {
-case "addUser":
-    addUser($_GET["username"]);
-    break;
-case "addUserPropertyValue":
-    addUserPropertyValue($_GET["username"], $_GET["property"], $_GET["value"]);
-    break;
-case "getUserProperties":
-    echo getUserProperties();
-    break;
-case "removeUser":
-    removeUser($_GET["userid"]);
-    break;
-case "login":
-    $isSucc = isExistUser($_GET["username"]);
-    echo $isSucc;
-    if ($isSucc) {
-        setLoginOperation($_GET["username"], time());
+function batch_registUsers($prename, $count, $properties, $note) {
+    for ($i = 0; $i < $count; $i++) {
+        $name = $prename."_$i";
+        addUser($name, $note);
+        foreach ($properties as $pro => $val) {
+            addUserPropertyValue($name, $pro, $val);
+        }
     }
-    break; 
-// case "addApp":
-//     addApp($_GET["appid"], $_GET["appname"]);
-//     break;
-// case "removeApp":
-//     removeApp($_GET["appname"]);
-//     break;
-// case "addOperation":
-//     addOperation(/*$_GET["operatingid"], */$_GET["operatingtime"], $_GET["userid"], $_GET["appid"]);
-//     break;
-// case "removeOperation":
-//     removeOperation($_GET["opreatingid"]);
-//     break;
-// case "countOperationForApp":
-//     echo count_operation_for_app($_GET["appid"]);
-//     break;
-default:
-    echo "command undefined.";
-    break;
 }
 
+function deleteBatchUsers($note) {
+    db_query("DELETE FROM user_pro_val WHERE userid in (SELECT userid FROM users WHERE note = \"$note\")");
+    db_query("DELETE FROM users WHERE note = \"$note\"");
+}
+
+function init_database() {
+    global $db;
+    if (isset($db)) {return;}
+    $db = new mysqli('127.0.0.1', 'root', 'FLZdown1km$mysql!');
+    if (mysqli_connect_errno()) {
+        echo "connect error!";
+        exit;
+    }
+    $db -> select_db('tpapp');
+}
+
+function processCommand() {
+    $command = $_GET["command"];
+    switch ($command) {
+    case "addUser":
+        addUser($_GET["username"]);
+        break;
+    case "addUserPropertyValue":
+        addUserPropertyValue($_GET["username"], $_GET["property"], $_GET["value"]);
+        break;
+    case "getUserProperties":
+        echo getUserProperties();
+        break;
+    case "removeUser":
+        removeUser($_GET["userid"]);
+        break;
+    case "login":
+        $isSucc = isExistUser($_GET["username"]);
+        echo $isSucc;
+        if ($isSucc) {
+            setLoginOperation($_GET["username"], time());
+        }
+        break; 
+    default:
+        echo "command undefined.";
+        break;
+    }
+}
+
+init_database();
+processCommand();

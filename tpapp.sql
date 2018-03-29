@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS users(
     userid INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(20) UNIQUE
+    username VARCHAR(20) UNIQUE,
+    note VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS user_properties(
