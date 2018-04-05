@@ -7,9 +7,10 @@ function db_query($query) {
 
 function addUser($username, $note = 0) {
     resetUserIdIterator();
-    $que = "INSERT INTO users(username) VALUES(\"$username\")";
+    $time = time();
+    $que = "INSERT INTO users(username, regist_time) VALUES(\"$username\", $time)";
     if ($note !== 0) {
-        $que = "INSERT INTO users(username, note) VALUES(\"$username\", \"$note\")";
+        $que = "INSERT INTO users(username, regist_time, note) VALUES(\"$username\", $time, \"$note\")";
     }
     db_query($que);
 }

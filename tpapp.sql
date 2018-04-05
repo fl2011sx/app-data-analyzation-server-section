@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS users(
     userid INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(20) UNIQUE,
+    regist_time DOUBLE(16, 2),
     note VARCHAR(20)
 );
 
@@ -30,3 +31,4 @@ INSERT users VALUES(1, "user1");
 INSERT users VALUES(2, "user2");
 
 INSERT operation_type VALUES("login");
+
